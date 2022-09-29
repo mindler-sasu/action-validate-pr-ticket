@@ -90,7 +90,7 @@ async function run() {
                     : "Ready for review & merge.",
             context: "action-ticketed-pull-request",
         });
-        core.info(wat.data);
+        core.info(JSON.stringify(wat.data));
     }
     catch (error) {
         if (error instanceof Error)
