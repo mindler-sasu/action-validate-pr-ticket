@@ -6,7 +6,7 @@ type ValidateOptions = {
 export const validatePrTitle = async (
   inputTitle: string,
   options: ValidateOptions
-) => {
+): Promise<boolean> => {
   const cleaned = inputTitle.replaceAll(/\n/g, "").trim();
   const ignoreLabels = options.ignoreLabels;
   const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));
@@ -14,7 +14,7 @@ export const validatePrTitle = async (
 
   const regex = new RegExp(
     options.teams.reduce((builtRegex, team, i) => {
-      return builtRegex + `${i !== 0 ? "|" : ""}${team}`;
+      return `${builtRegex}${i !== 0 ? "|" : ""}${team}`;
     }, "(") + ")[\\-_\\s][0-9]+",
     "gi"
   );

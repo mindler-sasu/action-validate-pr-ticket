@@ -179,7 +179,7 @@ const validatePrTitle = async (inputTitle, options) => {
     if (ignored)
         return true;
     const regex = new RegExp(options.teams.reduce((builtRegex, team, i) => {
-        return builtRegex + `${i !== 0 ? "|" : ""}${team}`;
+        return `${builtRegex}${i !== 0 ? "|" : ""}${team}`;
     }, "(") + ")[\\-_\\s][0-9]+", "gi");
     const matches = cleaned.match(regex);
     if (!matches) {

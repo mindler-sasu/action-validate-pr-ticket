@@ -7,6 +7,7 @@ inputs:
     description: 'input team abbreviations here'
     default: 'ANA, CON, CRK, CT, CLOC, DES, MN, DNA, MAP, GOS, CBT, ICBT, MDF, WS, OPS, PC, MPE, PIM, SPR, WK'
   ignoreLabels:
+    required: false
     description: 'keywords in brackets to ignore check.'
     default: "ninja, fire"
   wip:
