@@ -52,7 +52,7 @@ async function run(): Promise<void> {
     }
     const newStatus = isWip || validationError != null ? "pending" : "success";
 
-    await client.request("POST /repos/:owner/:repo/statuses/:sha", {
+    const wat = await client.request("POST /repos/:owner/:repo/statuses/:sha", {
       owner,
       repo,
       sha: pullRequest.head.sha,
@@ -65,6 +65,7 @@ async function run(): Promise<void> {
         : "Ready for review & merge.",
       context: "action-ticketed-pull-request",
     });
+    core.info(wat.data);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
   }
