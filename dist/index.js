@@ -36,6 +36,7 @@ const parseConfig_1 = __nccwpck_require__(266);
 const validatePrTitle_1 = __nccwpck_require__(2127);
 async function run() {
     try {
+        core.info("blblblbl, running shit");
         const { githubBaseUrl, ignoreLabels, wip, teams } = (0, parseConfig_1.parseConfig)();
         const client = github.getOctokit(process.env.GITHUB_TOKEN || "", {
             baseUrl: githubBaseUrl,
@@ -179,7 +180,7 @@ const validatePrTitle = async (inputTitle, options) => {
     if (ignored)
         return true;
     const regex = new RegExp(options.teams.reduce((builtRegex, team, i) => {
-        return builtRegex + `${i !== 0 ? "|" : ""}${team}`;
+        return `${builtRegex}${i !== 0 ? "|" : ""}${team}`;
     }, "(") + ")[\\-_\\s][0-9]+", "gi");
     const matches = cleaned.match(regex);
     if (!matches) {

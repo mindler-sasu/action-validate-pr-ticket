@@ -4,6 +4,7 @@ import { parseConfig } from "./parseConfig";
 import { validatePrTitle } from "./validatePrTitle";
 async function run(): Promise<void> {
   try {
+    core.info("blblblbl, running shit");
     const { githubBaseUrl, ignoreLabels, wip, teams } = parseConfig();
     const client = github.getOctokit(process.env.GITHUB_TOKEN || "", {
       baseUrl: githubBaseUrl,
