@@ -4,7 +4,6 @@ import { parseConfig } from "./parseConfig";
 import { validatePrTitle } from "./validatePrTitle";
 async function run(): Promise<void> {
   try {
-    core.info("blblblbl, running shit");
     const { githubBaseUrl, ignoreLabels, wip, teams } = parseConfig();
     const client = github.getOctokit(process.env.GITHUB_TOKEN || "", {
       baseUrl: githubBaseUrl,
@@ -52,7 +51,7 @@ async function run(): Promise<void> {
     }
     const newStatus = isWip || validationError != null ? "pending" : "success";
 
-    const wat = await client.request("POST /repos/:owner/:repo/statuses/:sha", {
+    await client.request("POST /repos/:owner/:repo/statuses/:sha", {
       owner,
       repo,
       sha: pullRequest.head.sha,
@@ -65,7 +64,6 @@ async function run(): Promise<void> {
         : "Ready for review & merge.",
       context: "action-ticketed-pull-request",
     });
-    core.info(JSON.stringify(wat.data));
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
   }

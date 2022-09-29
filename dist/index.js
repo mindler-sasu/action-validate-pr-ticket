@@ -36,7 +36,6 @@ const parseConfig_1 = __nccwpck_require__(266);
 const validatePrTitle_1 = __nccwpck_require__(2127);
 async function run() {
     try {
-        core.info("blblblbl, running shit");
         const { githubBaseUrl, ignoreLabels, wip, teams } = (0, parseConfig_1.parseConfig)();
         const client = github.getOctokit(process.env.GITHUB_TOKEN || "", {
             baseUrl: githubBaseUrl,
@@ -77,7 +76,7 @@ async function run() {
             validationError = error;
         }
         const newStatus = isWip || validationError != null ? "pending" : "success";
-        const wat = await client.request("POST /repos/:owner/:repo/statuses/:sha", {
+        await client.request("POST /repos/:owner/:repo/statuses/:sha", {
             owner,
             repo,
             sha: pullRequest.head.sha,
@@ -90,7 +89,6 @@ async function run() {
                     : "Ready for review & merge.",
             context: "action-ticketed-pull-request",
         });
-        core.info(JSON.stringify(wat.data));
     }
     catch (error) {
         if (error instanceof Error)
