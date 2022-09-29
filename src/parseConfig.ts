@@ -27,7 +27,12 @@ const DEFAULT_TEAMS = [
   "SPR",
   "WK",
 ];
-export const parseConfig = () => {
+export const parseConfig = (): {
+  wip?: string;
+  githubBaseUrl?: string;
+  ignoreLabels: string[];
+  teams: string[];
+} => {
   const wip = process.env.INPUT_WIP;
   const githubBaseUrl = process.env.INPUT_GITHUBBASEURL;
   const ignoreLabels = [
