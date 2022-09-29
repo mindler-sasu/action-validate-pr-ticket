@@ -2,10 +2,19 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  teams:
+    required: false
+    description: 'input team abbreviations here'
+    default: 'ANA, CON, CRK, CT, CLOC, DES, MN, DNA, MAP, GOS, CBT, ICBT, MDF, WS, OPS, PC, MPE, PIM, SPR, WK'
+  ignoreLabels:
+    description: 'keywords in brackets to ignore check.'
+    default: "ninja, fire"
+  wip:
+    description: "For work-in-progress PRs you can typically use draft pull requests from Github. However, private repositories on the free plan don't have this option and therefore this action allows you to opt-in to using the special '[WIP]' prefix to indicate this state. This will avoid the validation of the PR title and the pull request checks remain pending. Note that a second check will be reported if this is enabled."
+    required: false
+  githubBaseUrl:
+    description: "If you use Github Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3)"
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
