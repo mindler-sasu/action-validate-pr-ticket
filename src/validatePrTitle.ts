@@ -11,7 +11,10 @@ export const validatePrTitle = async (
   const cleaned = inputTitle.replaceAll(/\n/g, "").trim();
   const ignoreLabels = options.ignoreLabels;
   const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));
-  if (ignored) return true;
+  if (ignored) {
+    core.info("ignored");
+    return true;
+  }
 
   const regex = new RegExp(
     options.teams.reduce((builtRegex, team, i) => {
@@ -20,6 +23,8 @@ export const validatePrTitle = async (
     "gi"
   );
   const matches = cleaned.match(regex);
-  core.info(`${regex}: ${cleaned}. Matches: ${matches}`);
+  core.info(
+    `${regex}: ${cleaned}. Matches: ${matches} AcualMatch: ${!!matches}`
+  );
   return !!matches;
 };

@@ -85,10 +85,12 @@ async function run() {
         ];
         core.info("brrrrr");
         core.info(JSON.stringify(textsToValidate));
-        const isLinkingTicket = textsToValidate.some(async (text) => await (0, validatePrTitle_1.validatePrTitle)(text, {
-            ignoreLabels,
-            teams,
-        }));
+        const isLinkingTicket = textsToValidate.some(async (text) => {
+            return await (0, validatePrTitle_1.validatePrTitle)(text, {
+                ignoreLabels,
+                teams,
+            });
+        });
         core.info(JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket }));
         const newStatus = isLinkingTicket ? "success" : "pending";
         await client.request("POST /repos/:owner/:repo/statuses/:sha", {
@@ -190,13 +192,15 @@ const validatePrTitle = async (inputTitle, options) => {
     const cleaned = inputTitle.replaceAll(/\n/g, "").trim();
     const ignoreLabels = options.ignoreLabels;
     const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));
-    if (ignored)
+    if (ignored) {
+        core.info("ignored");
         return true;
+    }
     const regex = new RegExp(options.teams.reduce((builtRegex, team, i) => {
         return `${builtRegex}${i !== 0 ? "|" : ""}${team}`;
     }, "(") + ")[\\-_\\s][0-9]+", "gi");
     const matches = cleaned.match(regex);
-    core.info(`${regex}: ${cleaned}. Matches: ${matches}`);
+    core.info(`${regex}: ${cleaned}. Matches: ${matches} AcualMatch: ${!!matches}`);
     return !!matches;
 };
 exports.validatePrTitle = validatePrTitle;
