@@ -41,15 +41,37 @@ async function run(): Promise<void> {
         }
       }
     }
-    try {
-      await validatePrTitle(pullRequest.title, {
-        ignoreLabels,
-        teams,
-      });
-    } catch (error) {
-      validationError = error;
+    const commits = [];
+
+    for await (const response of client.paginate.iterator(
+      client.rest.pulls.listCommits,
+      {
+        owner,
+        repo,
+        pull_number: contextPullRequest.number,
+      }
+    )) {
+      commits.push(...response.data);
     }
-    const newStatus = isWip || validationError != null ? "pending" : "success";
+    const nonMergeCommits = commits.filter((commit) => {
+      if (!commit) return false;
+      return commit.parents.length < 2;
+    });
+
+    const textsToValidate = [
+      pullRequest.title,
+      pullRequest.head.ref,
+      ...nonMergeCommits.map((commit) => commit.commit.message.trim()),
+    ];
+    const isLinkingTicket = textsToValidate.some(
+      async (text) =>
+        await validatePrTitle(text, {
+          ignoreLabels,
+          teams,
+        })
+    );
+
+    const newStatus = isWip || !isLinkingTicket ? "pending" : "success";
 
     await client.request("POST /repos/:owner/:repo/statuses/:sha", {
       owner,
@@ -59,9 +81,9 @@ async function run(): Promise<void> {
       target_url: "https://github.com/mindler-sasu/blbllb",
       description: isWip
         ? 'This PR is marked with "[WIP]".'
-        : validationError
-        ? "PR title validation failed"
-        : "Ready for review & merge.",
+        : isLinkingTicket
+        ? "Ready for review & merge."
+        : "Ticket not referenced in pull request!",
       context: "action-ticketed-pull-request",
     });
   } catch (error) {

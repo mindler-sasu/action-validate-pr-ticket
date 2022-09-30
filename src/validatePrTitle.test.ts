@@ -17,21 +17,21 @@ it("allows valid PR titles that use the default types", async () => {
 it("throws for PR titles without a ticket", async () => {
   await expect(
     validatePrTitle("Fix bug", { teams, ignoreLabels })
-  ).rejects.toThrow('No ticket provided in pull request title "Fix bug"');
+  ).resolves.toEqual(false);
 });
 it("throws for PR titles without a ticket number", async () => {
   await expect(
     validatePrTitle("DNA: bug", { teams, ignoreLabels })
-  ).rejects.toThrow('No ticket provided in pull request title "DNA: bug"');
+  ).resolves.toEqual(false);
 });
 it("throws for PR titles without a ticket number2", async () => {
   await expect(
     validatePrTitle("DNA-: bug", { teams, ignoreLabels })
-  ).rejects.toThrow('No ticket provided in pull request title "DNA-: bug"');
+  ).resolves.toEqual(false);
 });
 it("throws for empty titles", async () => {
-  await expect(validatePrTitle("", { teams, ignoreLabels })).rejects.toThrow(
-    'No ticket provided in pull request title ""'
+  await expect(validatePrTitle("", { teams, ignoreLabels })).resolves.toEqual(
+    false
   );
 });
 

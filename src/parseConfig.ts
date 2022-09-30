@@ -5,28 +5,7 @@ const DEFAULT_IGNORE_LABELS = [
   "running with scissors",
   "fire",
 ];
-const DEFAULT_TEAMS = [
-  "ANA",
-  "CON",
-  "CRK",
-  "CT",
-  "CLOC",
-  "DES",
-  "MN",
-  "DNA",
-  "MAP",
-  "GOS",
-  "CBT",
-  "ICBT",
-  "MDF",
-  "WS",
-  "OPS",
-  "PC",
-  "MPE",
-  "PIM",
-  "SPR",
-  "WK",
-];
+
 export const parseConfig = (): {
   wip?: string;
   githubBaseUrl?: string;
@@ -51,7 +30,6 @@ export const parseConfig = (): {
         .split(ENUM_SPLIT_REGEX)
         .map((part) => part.trim())
         .filter((part) => part.length > 0)
-        .concat(DEFAULT_TEAMS)
     ),
   ];
 
