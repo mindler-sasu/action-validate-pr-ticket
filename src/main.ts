@@ -73,6 +73,9 @@ async function run(): Promise<void> {
           teams,
         })
     );
+    core.info(
+      JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket })
+    );
 
     const newStatus = isWip || !isLinkingTicket ? "pending" : "success";
 

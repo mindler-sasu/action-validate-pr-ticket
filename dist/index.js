@@ -89,6 +89,7 @@ async function run() {
             ignoreLabels,
             teams,
         }));
+        core.info(JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket }));
         const newStatus = isWip || !isLinkingTicket ? "pending" : "success";
         await client.request("POST /repos/:owner/:repo/statuses/:sha", {
             owner,
