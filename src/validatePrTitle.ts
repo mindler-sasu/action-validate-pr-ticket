@@ -12,7 +12,7 @@ export const validatePrTitle = (
   const ignoreLabels = options.ignoreLabels;
   const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));
   if (ignored) {
-    core.info("ignored");
+    core.debug("ignored");
     return true;
   }
 
@@ -23,7 +23,7 @@ export const validatePrTitle = (
     "gi"
   );
   const matches = cleaned.match(regex);
-  core.info(
+  core.debug(
     `${regex}: ${cleaned}. Matches: ${matches} AcualMatch: ${!!matches}`
   );
   return !!matches;
