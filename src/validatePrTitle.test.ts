@@ -15,24 +15,22 @@ it("allows valid PR titles that use the default types", async () => {
 });
 
 it("throws for PR titles without a ticket", async () => {
-  await expect(
-    validatePrTitle("Fix bug", { teams, ignoreLabels })
-  ).resolves.toEqual(false);
-});
-it("throws for PR titles without a ticket number", async () => {
-  await expect(
-    validatePrTitle("DNA: bug", { teams, ignoreLabels })
-  ).resolves.toEqual(false);
-});
-it("throws for PR titles without a ticket number2", async () => {
-  await expect(
-    validatePrTitle("DNA-: bug", { teams, ignoreLabels })
-  ).resolves.toEqual(false);
-});
-it("throws for empty titles", async () => {
-  await expect(validatePrTitle("", { teams, ignoreLabels })).resolves.toEqual(
+  await expect(validatePrTitle("Fix bug", { teams, ignoreLabels })).toEqual(
     false
   );
+});
+it("throws for PR titles without a ticket number", async () => {
+  await expect(validatePrTitle("DNA: bug", { teams, ignoreLabels })).toEqual(
+    false
+  );
+});
+it("throws for PR titles without a ticket number2", async () => {
+  await expect(validatePrTitle("DNA-: bug", { teams, ignoreLabels })).toEqual(
+    false
+  );
+});
+it("throws for empty titles", async () => {
+  await expect(validatePrTitle("", { teams, ignoreLabels })).toEqual(false);
 });
 
 it("works for PR titles with ticket presented not in start", async () => {
@@ -41,7 +39,7 @@ it("works for PR titles with ticket presented not in start", async () => {
       teams,
       ignoreLabels,
     })
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
 it("works for PR titles with ticket number underscored", async () => {
   await expect(
@@ -49,7 +47,7 @@ it("works for PR titles with ticket number underscored", async () => {
       teams,
       ignoreLabels,
     })
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
 it("works for PR titles with ticket number spaced", async () => {
   await expect(
@@ -57,7 +55,7 @@ it("works for PR titles with ticket number spaced", async () => {
       teams,
       ignoreLabels,
     })
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
 
 it("doesnt throw if ignoreLabel ninja is in place", async () => {
@@ -66,7 +64,7 @@ it("doesnt throw if ignoreLabel ninja is in place", async () => {
       teams,
       ignoreLabels,
     })
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
 
 it("doesnt throw if ignoreLabel fire is in place", async () => {
@@ -75,7 +73,7 @@ it("doesnt throw if ignoreLabel fire is in place", async () => {
       teams,
       ignoreLabels,
     })
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
 it("doesnt throw if ignoreLabel running with scissors is in place", async () => {
   await expect(
@@ -83,7 +81,7 @@ it("doesnt throw if ignoreLabel running with scissors is in place", async () => 
       "[running with scissors] they seee me merginn' they hatin'",
       { teams, ignoreLabels }
     )
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
 it("doesnt throw if ignoreLabel chore is in place", async () => {
   await expect(
@@ -91,5 +89,5 @@ it("doesnt throw if ignoreLabel chore is in place", async () => {
       teams,
       ignoreLabels,
     })
-  ).resolves.toEqual(true);
+  ).toEqual(true);
 });
