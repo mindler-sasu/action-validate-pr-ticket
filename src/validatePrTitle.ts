@@ -1,3 +1,4 @@
+import * as core from "@actions/core";
 type ValidateOptions = {
   teams: string[];
   ignoreLabels: string[];
@@ -19,5 +20,6 @@ export const validatePrTitle = async (
     "gi"
   );
   const matches = cleaned.match(regex);
+  core.info(`${regex}: ${cleaned}. Matches: ${matches}`);
   return !!matches;
 };
