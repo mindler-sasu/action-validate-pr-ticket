@@ -66,13 +66,12 @@ async function run(): Promise<void> {
     core.info("brrrrr");
     core.info(JSON.stringify(textsToValidate));
 
-    const isLinkingTicket = textsToValidate.some(
-      async (text) =>
-        await validatePrTitle(text, {
-          ignoreLabels,
-          teams,
-        })
-    );
+    const isLinkingTicket = textsToValidate.some(async (text) => {
+      return await validatePrTitle(text, {
+        ignoreLabels,
+        teams,
+      });
+    });
     core.info(
       JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket })
     );
