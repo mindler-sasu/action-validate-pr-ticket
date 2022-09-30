@@ -82,15 +82,14 @@ async function run() {
             pullRequest.head.ref,
             ...nonMergeCommits.map((commit) => commit.commit.message.trim()),
         ];
-        core.info("brrrrr");
-        core.info(JSON.stringify(textsToValidate));
+        core.debug(JSON.stringify(textsToValidate));
         const isLinkingTicket = textsToValidate.some((text) => {
             return (0, validatePrTitle_1.validatePrTitle)(text, {
                 ignoreLabels,
                 teams,
             });
         });
-        core.info(JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket }));
+        core.debug(JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket }));
         const newStatus = isLinkingTicket ? "success" : "pending";
         await client.request("POST /repos/:owner/:repo/statuses/:sha", {
             owner,
@@ -192,14 +191,14 @@ const validatePrTitle = (inputTitle, options) => {
     const ignoreLabels = options.ignoreLabels;
     const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));
     if (ignored) {
-        core.info("ignored");
+        core.debug("ignored");
         return true;
     }
     const regex = new RegExp(options.teams.reduce((builtRegex, team, i) => {
         return `${builtRegex}${i !== 0 ? "|" : ""}${team}`;
     }, "(") + ")[\\-_\\s][0-9]+", "gi");
     const matches = cleaned.match(regex);
-    core.info(`${regex}: ${cleaned}. Matches: ${matches} AcualMatch: ${!!matches}`);
+    core.debug(`${regex}: ${cleaned}. Matches: ${matches} AcualMatch: ${!!matches}`);
     return !!matches;
 };
 exports.validatePrTitle = validatePrTitle;
