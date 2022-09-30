@@ -73,8 +73,11 @@ async function run(): Promise<void> {
           teams,
         })
     );
+    core.info(
+      JSON.stringify({ strings: textsToValidate, isLinking: isLinkingTicket })
+    );
 
-    const newStatus = isWip || !isLinkingTicket ? "pending" : "success";
+    const newStatus = isLinkingTicket ? "success" : "pending";
 
     await client.request("POST /repos/:owner/:repo/statuses/:sha", {
       owner,
@@ -82,9 +85,7 @@ async function run(): Promise<void> {
       sha: pullRequest.head.sha,
       state: newStatus,
       target_url: "https://github.com/mindler-sasu/blbllb",
-      description: isWip
-        ? 'This PR is marked with "[WIP]".'
-        : isLinkingTicket
+      description: isLinkingTicket
         ? "Ready for review & merge."
         : "Ticket not referenced in pull request!",
       context: "action-ticketed-pull-request",
