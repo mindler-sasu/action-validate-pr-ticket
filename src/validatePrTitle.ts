@@ -19,8 +19,5 @@ export const validatePrTitle = async (
     "gi"
   );
   const matches = cleaned.match(regex);
-  if (!matches) {
-    throw new Error(`No ticket provided in pull request title "${inputTitle}"`);
-  }
-  return true;
+  return !!matches;
 };

@@ -66,16 +66,29 @@ async function run() {
                 }
             }
         }
-        try {
-            await (0, validatePrTitle_1.validatePrTitle)(pullRequest.title, {
-                ignoreLabels,
-                teams,
-            });
+        const commits = [];
+        for await (const response of client.paginate.iterator(client.rest.pulls.listCommits, {
+            owner,
+            repo,
+            pull_number: contextPullRequest.number,
+        })) {
+            commits.push(...response.data);
         }
-        catch (error) {
-            validationError = error;
-        }
-        const newStatus = isWip || validationError != null ? "pending" : "success";
+        const nonMergeCommits = commits.filter((commit) => {
+            if (!commit)
+                return false;
+            return commit.parents.length < 2;
+        });
+        const textsToValidate = [
+            pullRequest.title,
+            pullRequest.head.ref,
+            ...nonMergeCommits.map((commit) => commit.commit.message.trim()),
+        ];
+        const isLinkingTicket = textsToValidate.some(async (text) => await (0, validatePrTitle_1.validatePrTitle)(text, {
+            ignoreLabels,
+            teams,
+        }));
+        const newStatus = isWip || !isLinkingTicket ? "pending" : "success";
         await client.request("POST /repos/:owner/:repo/statuses/:sha", {
             owner,
             repo,
@@ -84,9 +97,9 @@ async function run() {
             target_url: "https://github.com/mindler-sasu/blbllb",
             description: isWip
                 ? 'This PR is marked with "[WIP]".'
-                : validationError
-                    ? "PR title validation failed"
-                    : "Ready for review & merge.",
+                : isLinkingTicket
+                    ? "Ready for review & merge."
+                    : "Ticket not referenced in pull request!",
             context: "action-ticketed-pull-request",
         });
     }
@@ -114,28 +127,6 @@ const DEFAULT_IGNORE_LABELS = [
     "running with scissors",
     "fire",
 ];
-const DEFAULT_TEAMS = [
-    "ANA",
-    "CON",
-    "CRK",
-    "CT",
-    "CLOC",
-    "DES",
-    "MN",
-    "DNA",
-    "MAP",
-    "GOS",
-    "CBT",
-    "ICBT",
-    "MDF",
-    "WS",
-    "OPS",
-    "PC",
-    "MPE",
-    "PIM",
-    "SPR",
-    "WK",
-];
 const parseConfig = () => {
     const wip = process.env.INPUT_WIP;
     const githubBaseUrl = process.env.INPUT_GITHUBBASEURL;
@@ -150,8 +141,7 @@ const parseConfig = () => {
         ...new Set((process.env.INPUT_TEAMS ?? "")
             .split(ENUM_SPLIT_REGEX)
             .map((part) => part.trim())
-            .filter((part) => part.length > 0)
-            .concat(DEFAULT_TEAMS)),
+            .filter((part) => part.length > 0)),
     ];
     return {
         wip,
@@ -182,10 +172,7 @@ const validatePrTitle = async (inputTitle, options) => {
         return `${builtRegex}${i !== 0 ? "|" : ""}${team}`;
     }, "(") + ")[\\-_\\s][0-9]+", "gi");
     const matches = cleaned.match(regex);
-    if (!matches) {
-        throw new Error(`No ticket provided in pull request title "${inputTitle}"`);
-    }
-    return true;
+    return !!matches;
 };
 exports.validatePrTitle = validatePrTitle;
 
