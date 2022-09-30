@@ -27,7 +27,7 @@ async function run(): Promise<void> {
       repo,
       pull_number: contextPullRequest.number,
     });
-    let validationError;
+
     const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
 
     if (ignoreLabels) {
@@ -63,6 +63,7 @@ async function run(): Promise<void> {
       pullRequest.head.ref,
       ...nonMergeCommits.map((commit) => commit.commit.message.trim()),
     ];
+    core.info(JSON.stringify(textsToValidate));
     const isLinkingTicket = textsToValidate.some(
       async (text) =>
         await validatePrTitle(text, {
