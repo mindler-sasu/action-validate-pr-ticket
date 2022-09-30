@@ -63,7 +63,9 @@ async function run(): Promise<void> {
       pullRequest.head.ref,
       ...nonMergeCommits.map((commit) => commit.commit.message.trim()),
     ];
+    core.info("brrrrr");
     core.info(JSON.stringify(textsToValidate));
+
     const isLinkingTicket = textsToValidate.some(
       async (text) =>
         await validatePrTitle(text, {
