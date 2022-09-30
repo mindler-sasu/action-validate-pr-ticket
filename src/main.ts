@@ -80,11 +80,11 @@ async function run(): Promise<void> {
       repo,
       sha: pullRequest.head.sha,
       state: newStatus,
-      target_url: "https://github.com/mindler-sasu/blbllb",
+      target_url: "https://github.com/mindler-sasu/action-validate-pr-ticket",
       description: isLinkingTicket
         ? "Ready for review & merge."
         : "Ticket not referenced in pull request!",
-      context: "action-ticketed-pull-request",
+      context: "action-validate-pr-ticket",
     });
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
