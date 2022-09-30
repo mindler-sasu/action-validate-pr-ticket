@@ -4,10 +4,10 @@ type ValidateOptions = {
   ignoreLabels: string[];
 };
 
-export const validatePrTitle = async (
+export const validatePrTitle = (
   inputTitle: string,
   options: ValidateOptions
-): Promise<boolean> => {
+): boolean => {
   const cleaned = inputTitle.replaceAll(/\n/g, "").trim();
   const ignoreLabels = options.ignoreLabels;
   const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));

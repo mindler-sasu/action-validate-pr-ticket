@@ -28,8 +28,6 @@ async function run(): Promise<void> {
       pull_number: contextPullRequest.number,
     });
 
-    const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
-
     if (ignoreLabels) {
       const labelNames = pullRequest.labels.map((label) => label.name);
       for (const labelName of labelNames) {
@@ -66,8 +64,8 @@ async function run(): Promise<void> {
     core.info("brrrrr");
     core.info(JSON.stringify(textsToValidate));
 
-    const isLinkingTicket = textsToValidate.some(async (text) => {
-      return await validatePrTitle(text, {
+    const isLinkingTicket = textsToValidate.some((text) => {
+      return validatePrTitle(text, {
         ignoreLabels,
         teams,
       });
