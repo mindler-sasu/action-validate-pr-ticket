@@ -55,7 +55,6 @@ async function run() {
             repo,
             pull_number: contextPullRequest.number,
         });
-        const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
         if (ignoreLabels) {
             const labelNames = pullRequest.labels.map((label) => label.name);
             for (const labelName of labelNames) {
@@ -85,8 +84,8 @@ async function run() {
         ];
         core.info("brrrrr");
         core.info(JSON.stringify(textsToValidate));
-        const isLinkingTicket = textsToValidate.some(async (text) => {
-            return await (0, validatePrTitle_1.validatePrTitle)(text, {
+        const isLinkingTicket = textsToValidate.some((text) => {
+            return (0, validatePrTitle_1.validatePrTitle)(text, {
                 ignoreLabels,
                 teams,
             });
@@ -188,7 +187,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validatePrTitle = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const validatePrTitle = async (inputTitle, options) => {
+const validatePrTitle = (inputTitle, options) => {
     const cleaned = inputTitle.replaceAll(/\n/g, "").trim();
     const ignoreLabels = options.ignoreLabels;
     const ignored = ignoreLabels.some((label) => cleaned.includes(`[${label}]`));
